@@ -90,7 +90,7 @@ Get_Status () {
 }
 
 Verify_Sqlite_exist () {
-  command -v sqlite3 &>/dev/null || yum install -y sqlite
+  command -v sqlite3 &>/dev/null || sudo yum install -y sqlite
 }
 
 Verify_Database_Exist () {

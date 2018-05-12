@@ -3,20 +3,20 @@
 # to get date -- date +%D
 # to get hour -- date +%H:%M
 
-Script_Options () {
-  while getopts "r" opt; do
-    case $opt in
-      r)
-        echo "This script can now be run as root, this is not recommended"
-        Run_As_Root_Var="1"
-        ;;
-      \?)
-        echo "Invalid option, the only valid option right now is -r"
-        exit 1
-        ;;
-      esac
-    done
-}
+
+while getopts "r" opt; do
+  case $opt in
+    r)
+      echo "This script can now be run as root, this is not recommended"
+      Run_As_Root_Var=1
+      ;;
+    \?)
+      echo "Invalid option, the only valid option right now is -r"
+      exit 1
+      ;;
+  esac
+done
+
 
 Root_Check () {		## checks that the script runs as root
 	if [[ $EUID -ne 0 ]]; then
@@ -68,29 +68,33 @@ Get_Date () {
 }
 
 Get_ID () {
-  read -p "Please enter your 3 digit ID : " Current_ID
-  until [[ $Current_ID =~ [0-9]{3} ]]; do
-    echo "Invalid ID, try again "
-    read -p "Please enter your 3 digit ID : " Current_ID
-  done
+  Current_ID=$(echo $USER)
 }
 
 Save_Start_Time () {
-  echo $Current_Time.$Current_Date > $Current_ID.txt
+  echo "Starting to count"
+  declare -i Seconds
+  while : ;do
+    sleep 1s
+    Seconds=$(( $Seconds + 1  ))
+    echo "$Seconds $Current_Time $Current_Date" > $Current_ID.txt
+  done
 }
 
 
 
 
 Main () {
-  if [[ Run_As_Root_Var =~ "1" ]]; then
+  if [[ Run_As_Root_Var -eq 1 ]]; then
     Distro_Check
-    Get_Time && Get_Date && Get_ID && Get_Status
+    Get_Time && Get_Date && Get_ID
+    Save_Start_Time
   else
     Root_Check
     Distro_Check
-    Get_Time && Get_Date && Get_ID && Get_Status
+    Get_Time && Get_Date && Get_ID
+    Save_Start_Time
   fi
 }
-Script_Options
+
 Main

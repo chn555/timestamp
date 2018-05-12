@@ -64,12 +64,17 @@ Get_Current_Time () {
 }
 
 Get_Start_Time () {
-  if [[ -e Current_ID.txt ]]; then
+  if [[ -e $Current_ID.txt ]]; then
+    pkill timerstart -u $USER
     read Text_File < $Current_ID.txt
   else
     echo "No start file found, please verify your ID"
   fi
-  echo Text_File
+  echo $Text_File
+  Seconds=$(echo $Text_File | cut -d " " -f 1)
+  Starting_Time=$(echo $Text_File | cut -d " " -f 2)
+  echo $Seconds
+  echo $Starting_Time
 }
 
 Get_Date () {
@@ -77,11 +82,7 @@ Get_Date () {
 }
 
 Get_ID () {
-  read -p "Please enter your 3 digit ID : " Current_ID
-  until [[ $Current_ID =~ [0-9]{3} ]]; do
-    echo "Invalid ID, try again "
-    read -p "Please enter your 3 digit ID : " Current_ID
-  done
+  Current_ID=$(echo $USER)
 }
 
 Get_Status () {
@@ -89,7 +90,7 @@ Get_Status () {
 }
 
 Verify_Sqlite_exist () {
-  command -v sqlite3 &>/dev/null || yum install -y sqlite
+  command -v sqlite3 &>/dev/null || sudo yum install -y sqlite
 }
 
 Verify_Database_Exist () {
@@ -99,7 +100,7 @@ Verify_Database_Exist () {
   elif [[ Database_Exist_Var -eq 0 ]]; then
     echo "Database does not exist, creating..."
     sqlite3 ./timestamp.db <<EOF
-    create table stamps (id TEXT,date TEXT,time TEXT,status TEXT);
+    create table stamps (id TEXT,date TEXT,startingtime TEXT,finishtime TEXT, totaltime TEXT, status TEXT);
     select * from stamps;
 EOF
   else
@@ -109,7 +110,7 @@ EOF
 }
 
 Insert_To_Database () {
-  sqlite3 ./timestamp.db "insert into stamps (id,date,time,status) values ('"$1"','"$2"','"$3"','"$4"');"
+  sqlite3 ./timestamp.db "insert into stamps (id,date,startingtime,finishtime,totaltime,status) values ('"$1"','"$2"','"$3"','"$4"','"$5"','"$6"');"
 }
 
 Display_Database () {
