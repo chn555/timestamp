@@ -97,7 +97,7 @@ Verify_Database_Exist () {
   elif [[ Database_Exist_Var -eq 0 ]]; then
     echo "Database does not exist, creating..."
     sqlite3 ./timestamp.db <<EOF
-    create table stamps (id TEXT,date TEXT,startingtime TEXT,finishtime TEXT, totaltime TEXT, status TEXT);
+    create table stamps (id TEXT,date TEXT,startingtime TEXT,finishtime TEXT, totaltime TEXT);
     select * from stamps;
 EOF
   else
@@ -107,7 +107,7 @@ EOF
 }
 
 Insert_To_Database () {
-  sqlite3 ./timestamp.db "insert into stamps (id,date,startingtime,finishtime,totaltime,status) values ('"$1"','"$2"','"$3"','"$4"','"$5"','"$6"');"
+  sqlite3 ./timestamp.db "insert into stamps (id,date,startingtime,finishtime,totaltime) values ('"$1"','"$2"','"$3"','"$4"','"$5"');"
 }
 
 Display_Database () {
@@ -117,18 +117,18 @@ Display_Database () {
 Main () {
   if [[ Run_As_Root_Var -eq 1 ]]; then
     Distro_Check
-    Get_Current_Time && Get_Start_Time && Get_Date && Get_ID
+    Get_Current_Time  && Get_Date && Get_ID && Get_Start_Time
     Verify_Sqlite_exist && Verify_Database_Exist
-    Insert_To_Database $Current_ID $Current_Date $Starting_Time $Current_Time $Seconds $Current_Status && echo "Timestamp successfully logged"
+    Insert_To_Database $Current_ID $Current_Date $Starting_Time $Current_Time $Seconds && echo "Timestamp successfully logged"
     Display_Database
   else
     Root_Check
     Distro_Check
-    Get_Current_Time && Get_Start_Time && Get_Date && Get_ID
+    Get_Current_Time && Get_Date && Get_ID && Get_Start_Time
     Verify_Sqlite_exist && Verify_Database_Exist
-    Insert_To_Database $Current_ID $Current_Date $Starting_Time $Current_Time $Seconds $Current_Status  && echo "Timestamp successfully logged"
+    Insert_To_Database $Current_ID $Current_Date $Starting_Time $Current_Time $Seconds && echo "Timestamp successfully logged"
     Display_Database
   fi
 }
-Get_ID
-Get_Start_Time
+
+Main
