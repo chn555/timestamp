@@ -55,7 +55,7 @@ Distro_Check () {		## checking the environment the user is currenttly running on
 	fi
 
 	if ! [[ $Distro_Val == "centos" ]]; then
-		printf "Sorry, this script does not support your system"
+    printf "Sorry, this script does not support your system \n it might still run, have fun trying \n"
 	fi
 }
 
