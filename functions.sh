@@ -3,7 +3,20 @@
 # to get date -- date +%D
 # to get hour -- date +%H:%M
 
-
+Script_Options () {
+  while getopts "r" opt; do
+    case $opt in
+      r)
+        echo "This script can now be run as root, this is not recommended"
+        Run_As_Root_Var="1"
+        ;;
+      \?)
+        echo "Invalid option, the only valid option right now is -r"
+        exit 1
+        ;;
+      esac
+    done
+}
 Root_Check () {		## checks that the script runs as root
 	if [[ $EUID -ne 0 ]]; then
 		:
@@ -104,12 +117,20 @@ Display_Database () {
 }
 
 Main () {
-  Root_Check
-  Distro_Check
-  Get_Time && Get_Date && Get_ID && Get_Status
-  Verify_Sqlite_exist && Verify_Database_Exist
-  Insert_To_Database $Current_ID $Current_Date $Current_Time $Current_Status && echo "Timestamp successfully logged"
-  Display_Database
+  if [[ Run_As_Root_Var -eq 1 ]]; then
+    Distro_Check
+    Get_Time && Get_Date && Get_ID && Get_Status
+    Verify_Sqlite_exist && Verify_Database_Exist
+    Insert_To_Database $Current_ID $Current_Date $Current_Time $Current_Status && echo "Timestamp successfully logged"
+    Display_Database
+  else
+    Root_Check
+    Distro_Check
+    Get_Time && Get_Date && Get_ID && Get_Status
+    Verify_Sqlite_exist && Verify_Database_Exist
+    Insert_To_Database $Current_ID $Current_Date $Current_Time $Current_Status && echo "Timestamp successfully logged"
+    Display_Database
+  fi
 }
 
 Main
