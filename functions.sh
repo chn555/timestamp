@@ -17,6 +17,7 @@ Script_Options () {
       esac
     done
 }
+
 Root_Check () {		## checks that the script runs as root
 	if [[ $EUID -ne 0 ]]; then
 		:
@@ -117,7 +118,7 @@ Display_Database () {
 }
 
 Main () {
-  if [[ Run_As_Root_Var -eq 1 ]]; then
+  if [[ Run_As_Root_Var = "1" ]]; then
     Distro_Check
     Get_Time && Get_Date && Get_ID && Get_Status
     Verify_Sqlite_exist && Verify_Database_Exist
