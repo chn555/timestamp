@@ -21,12 +21,13 @@ Get_ID () {
 
 Get_Status () {
   select Get_Status_Menu_Var in In Out; do
-    case $Get_Status_Menu_Var in 
+    case $Get_Status_Menu_Var in
       "In")
         Current_Status="In" ;;
-
+        return
       "Out")
         Current_Status="Out" ;;
+        return 
     esac
   done
 }
