@@ -77,7 +77,7 @@ Save_Start_Time () {
   while : ;do
     sleep 1s
     Seconds=$(( $Seconds + 1  ))
-    echo "$Seconds $Current_Time $Current_Date" > $Current_ID.txt
+    echo "$Seconds $Current_Time $Current_Date $$" > $Current_ID.txt
   done
 }
 

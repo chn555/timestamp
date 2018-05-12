@@ -65,7 +65,8 @@ Get_Current_Time () {
 
 Get_Start_Time () {
   if [[ -e $Current_ID.txt ]]; then
-    pkill timerstart -u $USER
+    startPID=$(cat $Current_ID.txt |cut -d "" -f 4)
+    kill -9 $startPID
     read Text_File < $Current_ID.txt
   else
     echo "No start file found, please verify your ID"
@@ -80,6 +81,10 @@ Get_Start_Time () {
 Get_Date () {
   Current_Date=$(date +%d/%m/%y)
 }
+/etc/sysconfig/network-sc/etc/sysconfig/network-scripts/ifcfg-enp0s3
+/etc/sysconfig/network-scripts/ifcfg-enp0s3
+/etc/sysconfig/network-scripts/ifcfg-enp0s3
+ripts/ifcfg-enp0s3
 
 Get_ID () {
   Current_ID=$(echo $USER)
