@@ -53,7 +53,7 @@ EOF
 }
 
 Insert_To_Database () {
-  sqlite3 ./timestamp.db "insert into stamps (id,date,time) values ('"$1"','"$2"','"$3"','"$4"');"
+  sqlite3 ./timestamp.db "insert into stamps (id,date,time,status) values ('"$1"','"$2"','"$3"','"$4"');"
 }
 
 Display_Database () {
