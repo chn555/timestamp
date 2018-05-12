@@ -66,5 +66,5 @@ Get_ID
 Get_Status
 Verify_Sqlite_exist
 Verify_Database_Exist
-Insert_To_Database $Current_ID $Current_Date $Current_Time  && echo "Timestamp successfully logged"
+Insert_To_Database $Current_ID $Current_Date $Current_Time $Current_Status && echo "Timestamp successfully logged"
 Display_Database
