@@ -3,6 +3,48 @@
 # to get date -- date +%D
 # to get hour -- date +%H:%M
 
+
+Root_Check () {		## checks that the script runs as root
+	if [[ $EUID -ne 0 ]]; then
+		:
+	else
+		printf "$line\n"
+		printf "The script cannot be run with root privileges\n"
+		printf "$line\n"
+		exit 1
+	fi
+}
+
+Distro_Check () {		## checking the environment the user is currenttly running on to determine which settings should be applied
+	cat /etc/*-release |grep ID |cut  -d "=" -f "2" |egrep "^arch$|^manjaro$" &> /dev/null
+
+	if [[ $? -eq 0 ]]; then
+	  	Distro_Val="arch"
+	else
+	  	:
+	fi
+
+  cat /etc/*-release |grep ID |cut  -d "=" -f "2" |egrep "^debian$|^\"Ubuntu\"$" &> /dev/null
+
+  if [[ $? -eq 0 ]]; then
+    	Distro_Val="debian"
+  else
+    	:
+  fi
+
+	cat /etc/*-release |grep ID |cut  -d "=" -f "2" |egrep "^\"centos\"$|^\"fedora\"$" &> /dev/null
+
+	if [[ $? -eq 0 ]]; then
+	   	Distro_Val="centos"
+	else
+		:
+	fi
+
+	if ! [[ $Distro_Val == "centos" ]]; then
+		printf "Sorry, this script does not support your system"
+	fi
+}
+
 Get_Time () {
   Current_Time=$(date +%H:%M)
 }
@@ -20,6 +62,7 @@ Get_ID () {
 }
 
 Get_Status () {
+  PS3="Please select status (1,2) : "
   select Get_Status_Menu_Var in In Out; do
     case $Get_Status_Menu_Var in
       "In")
@@ -60,11 +103,11 @@ Display_Database () {
   sqlite3 ./timestamp.db "SELECT * FROM stamps"
 }
 
-Get_Time
-Get_Date
-Get_ID
-Get_Status
-Verify_Sqlite_exist
-Verify_Database_Exist
-Insert_To_Database $Current_ID $Current_Date $Current_Time $Current_Status && echo "Timestamp successfully logged"
-Display_Database
+main () {
+  Root_Check
+  Distro_Check
+  Get_Time && Get_Date && Get_ID && Get_Status
+  Verify_Sqlite_exist && Verify_Database_Exist
+  Insert_To_Database $Current_ID $Current_Date $Current_Time $Current_Status && echo "Timestamp successfully logged"
+  Display_Database
+}
