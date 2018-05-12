@@ -76,7 +76,7 @@ Get_ID () {
 }
 
 Save_Start_Time () {
-  
+  echo $Current_Time.$Current_Date > $Current_ID.txt
 }
 
 

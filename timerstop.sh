@@ -59,8 +59,17 @@ Distro_Check () {		## checking the environment the user is currenttly running on
 	fi
 }
 
-Get_Time () {
+Get_Current_Time () {
   Current_Time=$(date +%H:%M)
+}
+
+Get_Start_Time () {
+  if [[ -e Current_ID.txt ]]; then
+    read Text_File < $Current_ID.txt
+  else
+    echo "No start file found, please verify your ID"
+  fi
+  echo Text_File
 }
 
 Get_Date () {
@@ -111,18 +120,18 @@ Main () {
   Script_Options
   if [[ -v Run_As_Root_Var ]]; then
     Distro_Check
-    Get_Time && Get_Date && Get_ID && Get_Status
+    Get_Current_Time && Get_Date && Get_ID && Get_Status
     Verify_Sqlite_exist && Verify_Database_Exist
     Insert_To_Database $Current_ID $Current_Date $Current_Time $Current_Status && echo "Timestamp successfully logged"
     Display_Database
   else
     Root_Check
     Distro_Check
-    Get_Time && Get_Date && Get_ID && Get_Status
+    Get_Current_Time && Get_Date && Get_ID && Get_Status
     Verify_Sqlite_exist && Verify_Database_Exist
     Insert_To_Database $Current_ID $Current_Date $Current_Time $Current_Status && echo "Timestamp successfully logged"
     Display_Database
   fi
 }
-
-Main
+Get_ID
+Get_Start_Time
