@@ -118,7 +118,7 @@ Display_Database () {
 }
 
 Main () {
-  if [[ Run_As_Root_Var = "1" ]]; then
+  if [[ -v Run_As_Root_Var ]]; then
     Distro_Check
     Get_Time && Get_Date && Get_ID && Get_Status
     Verify_Sqlite_exist && Verify_Database_Exist
