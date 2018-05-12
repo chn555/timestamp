@@ -20,7 +20,7 @@ Get_ID () {
 }
 
 Verify_Sqlite_exist () {
-  command -v sqlite3 || yum install -y sqlite
+  command -v sqlite3 &>/dev/null || yum install -y sqlite
 }
 
 Verify_Database_Exist () {
@@ -30,7 +30,7 @@ Verify_Database_Exist () {
   elif [[ Database_Exist_Var -eq 0 ]]; then
     echo "Database does not exist, creating..."
     sqlite3 ./timestamp.db <<EOF
-    create table stamps (id INTEGER,date TEXT,time TEXT);
+    create table stamps (id TEXT,date TEXT,time TEXT);
     insert into stamps (id, date, time) values ('001','12/09/17', '00:00');
     select * from stamps;
 EOF
