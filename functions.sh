@@ -40,7 +40,7 @@ EOF
 }
 
 Insert_To_Database () {
-  sqlite3 ./timestamp.db "insert into n (id,date,time) values ("$1","$2","$3");"
+  sqlite3 ./timestamp.db "insert into n (id,date,time) values ('"$1"','"$2"','"$3"');"
 }
 
 
