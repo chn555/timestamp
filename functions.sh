@@ -26,7 +26,7 @@ Verify_Sqlite_exist () {
 Verify_Database_Exist () {
   Database_Exist_Var=$(sqlite3 ./timestamp.db "SELECT EXISTS (SELECT * FROM sqlite_master WHERE type='table' AND name='stamps');")
   if [[ Database_Exist_Var -eq 1 ]]; then
-    echo "Database exists, moving on"
+    :
   elif [[ Database_Exist_Var -eq 0 ]]; then
     echo "Database does not exist, creating..."
     sqlite3 ./timestamp.db <<EOF
@@ -43,6 +43,9 @@ Insert_To_Database () {
   sqlite3 ./timestamp.db "insert into stamps (id,date,time) values ('"$1"','"$2"','"$3"');"
 }
 
+Display_Database () {
+  sqlite3 ./timestamp.db "SELECT * FROM stamps"
+}
 
 Get_Time
 Get_Date
@@ -53,3 +56,4 @@ printf "%s\n" $Current_Time $Current_Date $Current_ID
 Verify_Sqlite_exist
 Verify_Database_Exist
 Insert_To_Database $Current_ID $Current_Date $Current_Time
+Display_Database
