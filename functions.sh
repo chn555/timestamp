@@ -19,6 +19,18 @@ Get_ID () {
   done
 }
 
+Get_Status () {
+  select Get_Status_Menu_Var in ("In", "Out"); do
+    case $Get_Status_Menu_Var in *
+      "In")
+        Current_Status="In" ;;
+
+      "Out")
+        Current_Status="Out" ;;
+    esac
+  done
+}
+
 Verify_Sqlite_exist () {
   command -v sqlite3 &>/dev/null || yum install -y sqlite
 }
@@ -30,7 +42,7 @@ Verify_Database_Exist () {
   elif [[ Database_Exist_Var -eq 0 ]]; then
     echo "Database does not exist, creating..."
     sqlite3 ./timestamp.db <<EOF
-    create table stamps (id TEXT,date TEXT,time TEXT);
+    create table stamps (id TEXT,date TEXT,time TEXT,status TEXT);
     select * from stamps;
 EOF
   else
@@ -40,7 +52,7 @@ EOF
 }
 
 Insert_To_Database () {
-  sqlite3 ./timestamp.db "insert into stamps (id,date,time) values ('"$1"','"$2"','"$3"');"
+  sqlite3 ./timestamp.db "insert into stamps (id,date,time) values ('"$1"','"$2"','"$3"','"$4"');"
 }
 
 Display_Database () {
@@ -50,10 +62,8 @@ Display_Database () {
 Get_Time
 Get_Date
 Get_ID
-
-printf "%s\n" $Current_Time $Current_Date $Current_ID
-
+Get_Status
 Verify_Sqlite_exist
 Verify_Database_Exist
-Insert_To_Database $Current_ID $Current_Date $Current_Time
+Insert_To_Database $Current_ID $Current_Date $Current_Time  && echo "Timestamp successfully logged"
 Display_Database
