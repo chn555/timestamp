@@ -31,12 +31,17 @@ Verify_Database_Exist () {
     echo "Database does not exist, creating..."
     sqlite3 ./timestamp.db <<EOF
     create table stamps (id TEXT,date TEXT,time TEXT);
-    insert into stamps (id, date, time) values ('001','12/09/17', '00:00');
     select * from stamps;
 EOF
+  else
+    echo "Something went wrong with the database, exiting."
+    exit 1
   fi
 }
 
+Insert_To_Database () {
+  sqlite3 ./timestamp.db "insert into n (id,date,time) values ("$1","$2","$3");"
+}
 
 
 Get_Time
@@ -47,3 +52,4 @@ printf "%s\n" $Current_Time $Current_Date $Current_ID
 
 Verify_Sqlite_exist
 Verify_Database_Exist
+Insert_To_Database $Current_ID $Current_Date $Current_Time
