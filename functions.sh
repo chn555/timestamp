@@ -118,6 +118,7 @@ Display_Database () {
 }
 
 Main () {
+  Script_Options
   if [[ -v Run_As_Root_Var ]]; then
     Distro_Check
     Get_Time && Get_Date && Get_ID && Get_Status
