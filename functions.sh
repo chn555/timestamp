@@ -13,7 +13,7 @@ Get_Date () {
 
 Get_ID () {
   read -p "Please enter your 3 digit ID : " Current_ID
-  until [[ $Current_ID =~ [0-9]{1,3} ]]; do
+  until [[ $Current_ID =~ [0-9]{3} ]]; do
     echo "Invalid ID, try again "
     read -p "Please enter your 3 digit ID : " Current_ID
   done
@@ -40,7 +40,7 @@ EOF
 }
 
 Insert_To_Database () {
-  sqlite3 ./timestamp.db "insert into n (id,date,time) values ('"$1"','"$2"','"$3"');"
+  sqlite3 ./timestamp.db "insert into stamps (id,date,time) values ('"$1"','"$2"','"$3"');"
 }
 
 
