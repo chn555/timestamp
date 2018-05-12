@@ -103,7 +103,7 @@ Display_Database () {
   sqlite3 ./timestamp.db "SELECT * FROM stamps"
 }
 
-main () {
+Main () {
   Root_Check
   Distro_Check
   Get_Time && Get_Date && Get_ID && Get_Status
@@ -111,3 +111,5 @@ main () {
   Insert_To_Database $Current_ID $Current_Date $Current_Time $Current_Status && echo "Timestamp successfully logged"
   Display_Database
 }
+
+Main
