@@ -3,20 +3,20 @@
 # to get date -- date +%D
 # to get hour -- date +%H:%M
 
-Script_Options () {
-  while getopts "r" opt; do
-    case $opt in
-      r)
-        echo "This script can now be run as root, this is not recommended"
-        Run_As_Root_Var="1"
-        ;;
-      \?)
-        echo "Invalid option, the only valid option right now is -r"
-        exit 1
-        ;;
-      esac
-    done
-}
+
+while getopts "r" opt; do
+  case $opt in
+    r)
+      echo "This script can now be run as root, this is not recommended"
+      Run_As_Root_Var="1"
+      ;;
+    \?)
+      echo "Invalid option, the only valid option right now is -r"
+      exit 1
+      ;;
+    esac
+  done
+
 
 Root_Check () {		## checks that the script runs as root
 	if [[ $EUID -ne 0 ]]; then
@@ -85,9 +85,6 @@ Get_ID () {
   Current_ID=$(echo $USER)
 }
 
-Get_Status () {
-  Current_Status="Out"
-}
 
 Verify_Sqlite_exist () {
   command -v sqlite3 &>/dev/null || sudo yum install -y sqlite
@@ -118,19 +115,18 @@ Display_Database () {
 }
 
 Main () {
-  Script_Options
-  if [[ -v Run_As_Root_Var ]]; then
+  if [[ Run_As_Root_Var -eq 1 ]]; then
     Distro_Check
-    Get_Current_Time && Get_Date && Get_ID && Get_Status
+    Get_Current_Time && Get_Start_Time && Get_Date && Get_ID
     Verify_Sqlite_exist && Verify_Database_Exist
-    Insert_To_Database $Current_ID $Current_Date $Current_Time $Current_Status && echo "Timestamp successfully logged"
+    Insert_To_Database $Current_ID $Current_Date $Starting_Time $Current_Time $Seconds $Current_Status && echo "Timestamp successfully logged"
     Display_Database
   else
     Root_Check
     Distro_Check
-    Get_Current_Time && Get_Date && Get_ID && Get_Status
+    Get_Current_Time && Get_Start_Time && Get_Date && Get_ID
     Verify_Sqlite_exist && Verify_Database_Exist
-    Insert_To_Database $Current_ID $Current_Date $Current_Time $Current_Status && echo "Timestamp successfully logged"
+    Insert_To_Database $Current_ID $Current_Date $Starting_Time $Current_Time $Seconds $Current_Status  && echo "Timestamp successfully logged"
     Display_Database
   fi
 }
