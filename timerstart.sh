@@ -83,7 +83,7 @@ Save_Start_Time () {
 
 
 Main () {
-  if [[ Run_As_Root_Var =~ "1"]]; then
+  if [[ Run_As_Root_Var =~ "1" ]]; then
     Distro_Check
     Get_Time && Get_Date && Get_ID && Get_Status
   else
