@@ -66,11 +66,11 @@ Get_Current_Time () {
 Get_Start_Time () {
   if [[ -e $Current_ID.txt ]]; then
     read Text_File < $Current_ID.txt
-    startPID=$(echo $Text_File |cut -d "" -f 4)
-    kill -9 $startPID
   else
     echo "No start file found, please verify your ID"
   fi
+  startPID=$(echo $Text_File |cut -d " " -f 4)
+  kill -9 $startPID
   echo $Text_File
   Seconds=$(echo $Text_File | cut -d " " -f 1)
   Starting_Time=$(echo $Text_File | cut -d " " -f 2)
