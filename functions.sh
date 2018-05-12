@@ -25,9 +25,9 @@ Verify_Sqlite_exist () {
 
 Verify_Database_Exist () {
   Database_Exist_Var=$(sqlite3 ./timestamp.db "SELECT EXISTS (SELECT * FROM sqlite_master WHERE type='table' AND name='stamps');")
-  if [[ Database_Exist_Var == "1" ]]; then
+  if [[ Database_Exist_Var -eq 1 ]]; then
     echo "Database exists, moving on"
-  elif [[ Database_Exist_Var == "0" ]]; then
+  elif [[ Database_Exist_Var -eq 0 ]]; then
     echo "Database does not exist, creating..."
     sqlite3 ./timestamp.db <<EOF
     create table stamps (id INTEGER,date TEXT,time TEXT);
