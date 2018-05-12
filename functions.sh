@@ -1,4 +1,14 @@
-#!/bin/bash
+#!/usr/bin/env #!/usr/bin/env bash
+
+#######################################################################################
+# Author	: Chn555 & BigRush
+#
+#License	: GPLv3
+#
+# Description	:  Some time Management
+#
+# Version	: 1.0.0
+#######################################################################################
 
 # to get date -- date +%D
 # to get hour -- date +%H:%M
