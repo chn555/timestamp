@@ -6,15 +6,6 @@ Work time manager
 
 These instructions will get you a copy of the project up and running on your local machine.
 
-### Prerequisites
-
-An updated Centos machine, currently no other distribution is being supported.
-To update your Centos system run:
-
-```
-sudo yum update -y 
-```
-
 
 ### Installing
 
@@ -48,7 +39,7 @@ bash timerstart.sh
 To stop the timer and see for how long have you worked:
 
 ```
-bash timerstart.sh
+bash timerstop.sh
 ```
 
 
